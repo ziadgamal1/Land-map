@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 
 import { LatLngExpression } from "leaflet";
 import Map from "./components/map";
-import MapOOP from "./components/mapOOP";
+import Mapform from "./components/Form";
 import plus from "../public/plus-large-svgrepo-com.svg";
 function App() {
   const tiles: string[] = [
@@ -30,9 +30,6 @@ function App() {
           <Map position={position} mapURL={tiles[tileNumber]} />
           {/* <MapOOP /> */}
 
-          <button className="absolute right-[10vw] top-[10vh] p-5 bg-white z-10 rounded-full hover:cursor-pointer active:animate-ping timer">
-            <img src={plus} alt="plus" className="w-[50px]" />
-          </button>
           <nav className="absolute z-10 top-0 w-[100vw] bg-gray-100 opacity-95">
             <ul className="nav-buttons">
               <li>

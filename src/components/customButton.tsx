@@ -1,18 +1,11 @@
 import "leaflet-draw/dist/leaflet.draw.css";
-import { useMap } from "react-leaflet";
-import L from "leaflet";
-export default function CustomButton() {
-  const map = useMap();
-  function clickHandler() {
-    const polygonDrawer = new L.Draw.Polygon(map);
-    polygonDrawer.enable();
-  }
+export default function CustomButton({ clickHandler }) {
   return (
     <button
-      className="absolute right-[50vw] top-[50vh] z-10"
       onClick={clickHandler}
+      className="absolute right-[10vw] top-[10vh] pr-5 pl-5 pt-3 pb-3 bg-white z-10 rounded-full hover:cursor-pointer active:animate-ping timer"
     >
-      Custom Button
+      <span className="text-black font-bold text-5xl ">+</span>
     </button>
   );
 }

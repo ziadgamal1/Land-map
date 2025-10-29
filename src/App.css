@@ -15,6 +15,20 @@
   .buttons {
     @apply pr-[50px] pl-[50px] w-[33.3vw] pt-5 pb-5 text-2xl font-bold border-r border-gray-300 hover:cursor-pointer;
   }
+  .button-form {
+    @apply pr-8 pl-8 mt-3 bg-amber-300 text-3xl font-bold hover:cursor-pointer hover:scale-110 hover:bg-amber-400 duration-500 rounded-2xl;
+  }
+  .button-submit {
+    @apply pr-8 pl-8 mt-6 bg-cyan-300 text-3xl font-bold hover:cursor-pointer hover:scale-110 hover:bg-cyan-700 hover:text-gray-50 duration-500 rounded-2xl;
+  }
+}
+@layer base {
+  label {
+    @apply block mb-2 text-xl font-medium text-gray-900 dark:text-white;
+  }
+  input {
+    @apply block mb-2 text-xl font-medium text-gray-900 dark:text-white bg-zinc-100 rounded-lg pl-2;
+  }
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -50,5 +64,5 @@
   }
 }
 .timer {
-  animation-duration: 250ms;
+  animation-duration: 80ms;
 }

@@ -14,8 +14,10 @@ import * as turf from "@turf/turf";
 import { EditControl } from "react-leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { useEffect, useState } from "react";
-
+import MapForm from "./Form";
+import { useRef, useState } from "react";
+import CustomButton from "./customButton";
+import { FormControl } from "./formControl";
 export default function Map({
   position,
   mapURL,
@@ -24,7 +26,16 @@ export default function Map({
   mapURL: string;
 }) {
   const colors = ["blue", "red", "green", "yellow", "orange", "purple"];
-
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const styles =
+    "absolute top-[10vh] right-[4vw] z-1 w-[350px] h-[65vh] p-6 bg-white border border-gray-200 rounded-4xl shadow-sm dark:bg-gray-800 dark:border-gray-700 transition-all ease-in-out  duration-500";
+  const stylesPosition = showForm
+    ? "transform translate-y-25 opacity-100"
+    : "opacity-0 pointer-events-none";
+  const totalStyles = `${styles} ${stylesPosition}`;
+  function handler() {
+    setShowForm(!showForm);
+  }
   const _onCreated = (e: any) => {
     const { layerType, layer } = e;
     if (layerType === "polygon") {
@@ -38,7 +49,6 @@ export default function Map({
       ) {
         coords.push(coords[0]);
       }
-
       const polygon = turf.polygon([coords]);
       const areaMeters = turf.area(polygon); // in square meters
       const areaKm2 = areaMeters / 1_000_000;
@@ -73,6 +83,11 @@ export default function Map({
       }}
       inertia={true}
     >
+      <FormControl>
+        <MapForm props={{ className: `${styles} ${stylesPosition}` }} />
+
+        {!showForm && <CustomButton clickHandler={() => handler()} />}
+      </FormControl>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url={mapURL}
