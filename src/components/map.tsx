@@ -15,9 +15,10 @@ import { EditControl } from "react-leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import MapForm from "./Form";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import CustomButton from "./customButton";
 import { FormControl } from "./formControl";
+import { colors } from "./polygon";
 export default function Map({
   position,
   mapURL,
@@ -25,7 +26,6 @@ export default function Map({
   position: LatLngExpression;
   mapURL: string;
 }) {
-  const colors = ["blue", "red", "green", "yellow", "orange", "purple"];
   const [showForm, setShowForm] = useState<boolean>(false);
   const styles =
     "absolute top-[10vh] right-[4vw] z-1 w-[350px] h-[65vh] p-6 bg-white border border-gray-200 rounded-4xl shadow-sm dark:bg-gray-800 dark:border-gray-700 transition-all ease-in-out  duration-500";
@@ -67,7 +67,6 @@ export default function Map({
         fillOpacity: 0.5,
       });
     }
-    console.log(layer);
   };
 
   return (

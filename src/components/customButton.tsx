@@ -1,5 +1,10 @@
 import "leaflet-draw/dist/leaflet.draw.css";
-export default function CustomButton({ clickHandler }) {
+import React from "react";
+export default function CustomButton({
+  clickHandler,
+}: {
+  clickHandler: React.MouseEventHandler<HTMLButtonElement>;
+}) {
   return (
     <button
       onClick={clickHandler}
