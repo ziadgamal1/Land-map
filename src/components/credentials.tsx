@@ -1,8 +1,9 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 export default function Login() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [message, setMessage] = useState<string>("");
   useEffect(() => {
     dialogRef.current?.showModal();
   }, []);
@@ -14,7 +15,8 @@ export default function Login() {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+    const responseData = await response.json();
+    setMessage(responseData.message);
   }
 
   const validationSchema = Yup.object().shape({
@@ -42,11 +44,20 @@ export default function Login() {
       <Formik
         initialValues={{ userName: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit={async (values, { setSubmitting }) => {
+          const response = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            body: JSON.stringify(values),
+          });
+          if (response.ok) {
+            history.replaceState({}, "", "/dashboard");
+            dialogRef.current?.close();
             setSubmitting(false);
-          }, 400);
+          } else {
+            const responseData = await response.json();
+            setMessage(responseData.message);
+            setSubmitting(false);
+          }
         }}
       >
         {({ isSubmitting, values }) => (
@@ -75,6 +86,7 @@ export default function Login() {
             >
               Login
             </button>
+            {message && <p className="mt-3 text-green-600">{message}</p>}
           </Form>
         )}
       </Formik>

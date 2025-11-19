@@ -10,6 +10,7 @@ export const db = mysql.createPool({
   password: pass,
   database: "landmap",
 });
+let usefulData = [];
 const upload = multer({
   fileFilter: (req, file, cb) => {
     const allowed = [
@@ -44,18 +45,35 @@ app.use((req, res, next) => {
 });
 app.post("/signup", (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  console.log(userName, password);
   db.query("insert into credentials (userName,password) values (?,?)", [
     userName,
     password,
   ])
     .then(() => {
-      res.status(200).send("User signed up successfully");
+      res.status(200).json({ message: "User signed up successfully" });
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send("Error signing up user");
+      res.status(500).json({ message: "Error signing up user" });
     });
+});
+app.post("/login", async (req, res) => {
+  const { userName, password } = JSON.parse(req.body);
+  usefulData.push(userName);
+  try {
+    const [rows] = await db.query(
+      "SELECT * FROM credentials WHERE userName = ? AND password = ?",
+      [userName, password]
+    );
+
+    if (rows.length > 0) {
+      return res.status(200).json({ message: "Login successful" });
+    } else {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Server error", error: err });
+  }
 });
 app.post("/form", upload.single("file"), (req, res) => {
   const buffer = req.body; // <— raw file bytes

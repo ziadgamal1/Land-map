@@ -33,7 +33,7 @@
     @apply bg-gray-300;
   }
   .crd-button {
-    @apply pr-4 pl-4 mr-4 bg-orange-600 text-lg mt-3  font-bold hover:cursor-pointer hover:scale-110 hover:bg-orange-700 hover:text-white duration-500 rounded-md;
+    @apply pr-4 pl-4 mr-4 bg-amber-600 text-lg mt-3  font-bold hover:cursor-pointer hover:scale-110 hover:bg-amber-700 hover:text-white duration-500 rounded-md;
   }
 }
 @layer base {
