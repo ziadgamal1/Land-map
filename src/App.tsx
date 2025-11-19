@@ -4,9 +4,7 @@ import "leaflet/dist/leaflet.css";
 
 import { LatLngExpression } from "leaflet";
 import Map from "./components/map";
-import Mapform from "./components/Form";
-import plus from "../public/plus-large-svgrepo-com.svg";
-
+import Login from "./components/credentials";
 function App() {
   const tiles: string[] = [
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -26,6 +24,7 @@ function App() {
 
   return (
     <div className="App">
+      <Login />
       {position && (
         <>
           <Map position={position} mapURL={tiles[tileNumber]} />
