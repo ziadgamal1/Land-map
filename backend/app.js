@@ -118,9 +118,35 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
     }
     res.status(200).send(coords);
   } catch (err) {
-    console.error(err);
     return res.status(400).send("Invalid GeoJSON file");
   }
 });
-app.get("/dashboard", authenticateToken, (req, res) => {});
+app.get("/dashboard", authenticateToken, async (req, res) => {
+  const [rows] = await db.query(
+    "select * from coordinates where username=? ORDER BY x ASC",
+    [req.user.userName]
+  );
+  const result = [];
+  let currentGroup = [];
+
+  for (const point of rows) {
+    const arr = [point.north, point.east];
+    currentGroup.push(arr);
+
+    // Check if this point already exists earlier in the current group
+    const isDuplicate = currentGroup
+      .slice(0, -1)
+      .some((p) => p[0] === arr[0] && p[1] === arr[1]);
+
+    if (isDuplicate) {
+      result.push(currentGroup);
+      currentGroup = [];
+    }
+  }
+
+  // Add any remaining points if the last group didn't end with a duplicate
+
+  console.log(result);
+  res.status(200).json([result]);
+});
 app.listen(port);

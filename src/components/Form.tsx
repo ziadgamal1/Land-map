@@ -1,6 +1,6 @@
 import { Formik, Form, Field, FieldArray } from "formik";
 import { useMap } from "react-leaflet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Result from "./result";
 import PolygonCalculation from "./polygon";
 interface Props extends React.HTMLAttributes<HTMLFormElement> {
@@ -19,11 +19,38 @@ interface FormValues {
 export default function MapForm({ props }: Props) {
   const map = useMap();
   const [calculatedNumber, setCalculatedNumber] = useState<number | null>(null);
+  const [DBdata, setDBdata] = useState<number[]>();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [active, setActive] = useState(false);
   const [isAverage, setIsAverage] = useState(false);
   function handleSwitch() {
     setCalculatedNumber(null);
     setActive(!active);
+  }
+  useEffect(() => {
+    async function fetchData() {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8080/dashboard", {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setDBdata(data);
+    }
+    fetchData();
+  }, []);
+  function showHandler() {
+    if (!DBdata || selectedOption === null) return;
+    const selected = DBdata[selectedOption as unknown as number];
+    console.log(selected);
+    const areaKm2 = PolygonCalculation(
+      selected.map((arr) => [arr]),
+      map
+    );
+    setCalculatedNumber(areaKm2);
   }
   return (
     <div {...props}>
@@ -182,6 +209,33 @@ export default function MapForm({ props }: Props) {
                   setFieldValue("file", event.currentTarget.files?.[0] ?? null);
                 }}
               />
+              {DBdata && (
+                <select
+                  name="stored-data"
+                  id="selection"
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setSelectedOption(e.target.value)
+                  }
+                >
+                  <option value="">Choose an option</option>
+                  {new Array(DBdata.length).fill("Land").map((land, i) => {
+                    return (
+                      <option key={i} value={i}>
+                        {land} {i + 1}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
+              {DBdata && selectedOption && (
+                <button
+                  type="button"
+                  onClick={showHandler}
+                  className="button-submit"
+                >
+                  Show
+                </button>
+              )}
               <button type="submit" className="button-submit">
                 Submit
               </button>
