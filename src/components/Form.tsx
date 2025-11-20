@@ -149,12 +149,13 @@ export default function MapForm({ props }: Props) {
         <Formik
           initialValues={{ file: null }}
           onSubmit={async (values) => {
-            console.log(values);
+            const token = localStorage.getItem("token");
             const response = await fetch("http://localhost:8080/form", {
               method: "POST",
               body: values.file,
               headers: {
                 "Content-Type": "application/geo+json",
+                authorization: `Bearer ${token}`,
               },
             });
             const arr = await response.json();

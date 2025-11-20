@@ -1,16 +1,18 @@
 const express = require("express");
 const app = express();
 const multer = require("multer");
+const cors = require("cors");
 import mysql from "mysql2/promise";
-import { pass } from "./password.js";
-import { use } from "react";
+import { pass, jwtPass } from "./password.js";
+import jwt from "jsonwebtoken";
+app.use(cors({ origin: "http://localhost:3000" }));
 export const db = mysql.createPool({
   host: "127.0.0.1",
   user: "Ziad",
   password: pass,
   database: "landmap",
 });
-let usefulData = [];
+
 const upload = multer({
   fileFilter: (req, file, cb) => {
     const allowed = [
@@ -57,9 +59,9 @@ app.post("/signup", (req, res) => {
       res.status(500).json({ message: "Error signing up user" });
     });
 });
+
 app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  usefulData.push(userName);
   try {
     const [rows] = await db.query(
       "SELECT * FROM credentials WHERE userName = ? AND password = ?",
@@ -67,7 +69,13 @@ app.post("/login", async (req, res) => {
     );
 
     if (rows.length > 0) {
-      return res.status(200).json({ message: "Login successful" });
+      const payload = {
+        userName: rows[0].username,
+      };
+      // STEP 2: Sign the payload to create the token
+      const token = jwt.sign(payload, jwtPass, { expiresIn: "1h" });
+      console.log(token);
+      return res.status(200).json({ message: "Login successful", token });
     } else {
       return res.status(401).json({ message: "Invalid username or password" });
     }
@@ -75,19 +83,37 @@ app.post("/login", async (req, res) => {
     return res.status(500).json({ message: "Server error", error: err });
   }
 });
-app.post("/form", upload.single("file"), (req, res) => {
-  const buffer = req.body; // <— raw file bytes
+// Middleware function to check and decode the token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  // Format is "Bearer TOKEN"
+  const token = authHeader && authHeader.split(" ")[1];
 
+  if (token == null) return res.sendStatus(401); // No token provided
+
+  jwt.verify(token, jwtPass, (err, user) => {
+    if (err) return res.sendStatus(403); // Token is invalid or expired
+    req.user = user; // Attach the decoded user data (e.g., { id: 1, userName: 'user' })
+    next(); // Move on to the route handler
+  });
+};
+app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
+  const buffer = req.body; // <— raw file bytes
+  const loggedInUser = req.user.userName;
   const text = buffer.toString("utf8"); // convert to string
   try {
     const geojson = JSON.parse(text);
     const coords = geojson.features.map((f) => f.geometry.coordinates);
+    let x = 0;
     for (const element of coords) {
       for (const point of element[0]) {
-        db.query("insert into coordinates (north, east) values (?, ?)", [
-          point[1],
-          point[0],
-        ]);
+        if (point[0] === element[0][0][0] && point[1] === element[0][0][1]) {
+          x++;
+        }
+        db.query(
+          "insert into coordinates (username,north, east,x) values (?,?, ?,?)",
+          [loggedInUser, point[1], point[0], x]
+        );
       }
     }
     res.status(200).send(coords);
@@ -96,5 +122,5 @@ app.post("/form", upload.single("file"), (req, res) => {
     return res.status(400).send("Invalid GeoJSON file");
   }
 });
-
+app.get("/dashboard", authenticateToken, (req, res) => {});
 app.listen(port);

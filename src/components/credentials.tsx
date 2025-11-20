@@ -4,7 +4,13 @@ import { useRef, useEffect, useState } from "react";
 export default function Login() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [message, setMessage] = useState<string>("");
+  const [showDashboard, setShowDashboard] = useState<boolean>(false);
   useEffect(() => {
+    if (localStorage.getItem("token")) {
+      history.replaceState({}, "", "/dashboard");
+      return;
+    }
+    setShowDashboard(true);
     dialogRef.current?.showModal();
   }, []);
   async function signUpHandler(values: { userName: string; password: string }) {
@@ -36,6 +42,9 @@ export default function Login() {
       .min(8, "Password must be at least 8 characters")
       .required("Required"),
   });
+  if (showDashboard) {
+    history.replaceState({}, "", "/login");
+  }
   return (
     <dialog
       ref={dialogRef}
@@ -49,6 +58,8 @@ export default function Login() {
             method: "POST",
             body: JSON.stringify(values),
           });
+          const responseData = await response.json();
+          localStorage.setItem("token", responseData.token);
           if (response.ok) {
             history.replaceState({}, "", "/dashboard");
             dialogRef.current?.close();
