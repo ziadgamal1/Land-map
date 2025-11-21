@@ -3,6 +3,7 @@ import { useMap } from "react-leaflet";
 import { useState, useEffect } from "react";
 import Result from "./result";
 import PolygonCalculation from "./polygon";
+import { getToken } from "./token";
 interface Props extends React.HTMLAttributes<HTMLFormElement> {
   props: {
     className: string;
@@ -19,7 +20,7 @@ interface FormValues {
 export default function MapForm({ props }: Props) {
   const map = useMap();
   const [calculatedNumber, setCalculatedNumber] = useState<number | null>(null);
-  const [DBdata, setDBdata] = useState<number[]>();
+  const [DBdata, setDBdata] = useState<number[][] | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [active, setActive] = useState(false);
   const [isAverage, setIsAverage] = useState(false);
@@ -27,21 +28,25 @@ export default function MapForm({ props }: Props) {
     setCalculatedNumber(null);
     setActive(!active);
   }
+  const token = getToken();
   useEffect(() => {
     async function fetchData() {
-      const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:8080/dashboard", {
         method: "GET",
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-      console.log(data);
-      setDBdata(data);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setDBdata(data);
+      } else {
+        return;
+      }
     }
     fetchData();
-  }, []);
+  }, [token]);
   function showHandler() {
     if (!DBdata || selectedOption === null) return;
     const selected = DBdata[selectedOption as unknown as number];
@@ -210,28 +215,37 @@ export default function MapForm({ props }: Props) {
                 }}
               />
               {DBdata && (
-                <select
-                  name="stored-data"
-                  id="selection"
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                    setSelectedOption(e.target.value)
-                  }
-                >
-                  <option value="">Choose an option</option>
-                  {new Array(DBdata.length).fill("Land").map((land, i) => {
-                    return (
-                      <option key={i} value={i}>
-                        {land} {i + 1}
-                      </option>
-                    );
-                  })}
-                </select>
+                <>
+                  <label
+                    htmlFor="stored-data"
+                    className="text-left mb-3 font-bold"
+                  >
+                    Saved data
+                  </label>
+                  <select
+                    name="stored-data"
+                    id="selection"
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setSelectedOption(e.target.value)
+                    }
+                    className="w-full p-2 text-lg font-semibold border  rounded-lg hover:cursor-pointer mb-2 "
+                  >
+                    <option value="">Choose an option</option>
+                    {new Array(DBdata.length).fill("Land").map((land, i) => {
+                      return (
+                        <option key={i} value={i}>
+                          {land} {i + 1}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </>
               )}
               {DBdata && selectedOption && (
                 <button
                   type="button"
                   onClick={showHandler}
-                  className="button-submit"
+                  className="button-submit bg-amber-500 hover:bg-amber-800"
                 >
                   Show
                 </button>

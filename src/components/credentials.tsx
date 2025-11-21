@@ -97,7 +97,15 @@ export default function Login() {
             >
               Login
             </button>
-            {message && <p className="mt-3 text-green-600">{message}</p>}
+            {message && (
+              <p
+                className={`mt-3 ${
+                  message.includes("Error") ? "text-red-600" : "text-green-600"
+                } font-semibold`}
+              >
+                {message}
+              </p>
+            )}
           </Form>
         )}
       </Formik>

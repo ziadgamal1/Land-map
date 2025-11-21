@@ -146,7 +146,11 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
 
   // Add any remaining points if the last group didn't end with a duplicate
 
-  console.log(result);
-  res.status(200).json([result]);
+  if (result.length === 0) {
+    res.status(404).json({ message: "No data found" });
+    return;
+  } else {
+    res.status(200).json([result]);
+  }
 });
 app.listen(port);
