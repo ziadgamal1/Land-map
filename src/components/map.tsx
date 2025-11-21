@@ -8,7 +8,7 @@ import {
 } from "react-leaflet";
 import ScaleControl from "./scale";
 import { LatLngExpression } from "leaflet";
-import logo from "../../public/location.png";
+import logo from "../../location.png";
 import L from "leaflet";
 import * as turf from "@turf/turf";
 import { EditControl } from "react-leaflet-draw";
