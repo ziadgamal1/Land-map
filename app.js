@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express();
 const multer = require("multer");
+require("dotenv").config();
 const cors = require("cors");
 import mysql from "mysql2/promise";
-import { pass, jwtPass } from "./password.js";
+const { pass, jwtPass } = process.env;
 import jwt from "jsonwebtoken";
 app.use(cors({ origin: "http://localhost:3000" }));
-export const db = mysql.createPool({
+const db = mysql.createPool({
   host: "127.0.0.1",
   user: "Ziad",
   password: pass,
@@ -62,6 +63,11 @@ app.post("/signup", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
+  const [rows1] = await db.query(
+    "SELECT * FROM credentials WHERE userName = ? AND password = ?",
+    [userName, password]
+  );
+  console.log(rows1);
   try {
     const [rows] = await db.query(
       "SELECT * FROM credentials WHERE userName = ? AND password = ?",
@@ -72,6 +78,7 @@ app.post("/login", async (req, res) => {
       const payload = {
         userName: rows[0].username,
       };
+      console.log(jwtPass);
       // STEP 2: Sign the payload to create the token
       const token = jwt.sign(payload, jwtPass, { expiresIn: "1h" });
       console.log(token);
