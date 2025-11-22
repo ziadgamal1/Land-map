@@ -1,46 +1,123 @@
-# Getting Started with Create React App
+---
+# Landmap
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Landmap is a full-stack web application that allows users to calculate and visualize land areas on a map. Users can log in, manage map layers, input coordinates, and upload GeoJSON/JSON files. Data is stored in a MySQL database for retrieval and future use.
+---
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication**: Secure login with username and password.
+- **Dashboard Map**:
 
-### `npm start`
+  - Change the map tile layer (OpenStreetMap, CartoDB, ArcGIS).
+  - Input latitude and longitude to calculate and display land area.
+  - Upload GeoJSON or JSON files to visualize land areas.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Data Storage**:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+  - MySQL database stores user inputs and uploaded data.
+  - Retrieve and display previously stored data.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+- **Frontend**: React-ts, React-Leaflet.js,tailwind-CSS
+- **Backend**: Node.js, Express,JWT(authentication)
+- **Database**: MySQL
+- **Mapping Services**: Leaflet tile layers (OpenStreetMap, CartoDB, ArcGIS)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+These instructions will help you set up the project locally.
 
-### `npm run eject`
+### Prerequisites
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Node.js and npm installed
+- MySQL server installed and running
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. **Clone the repository**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+git clone https://github.com/yourusername/landmap.git
+cd landmap
+```
 
-## Learn More
+2. **Install dependencies**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. **Set up MySQL database**
+
+- Create a MySQL database manually.
+- Run the SQL script provided in `/db/schema.sql` (if available) to create necessary tables.
+- Note the database credentials for the `.env` file.
+
+4. **Configure environment variables**
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+DB_HOST=localhost
+DB_USER=your_mysql_user
+DB_PASSWORD=your_mysql_password
+DB_NAME=your_database_name
+DB_PORT=3306
+```
+
+> If using SSL (for hosted DBs like Aiven), add the CA certificate as an environment variable as well.
+
+5. **Run the backend**
+
+```bash
+npm run server
+```
+
+6. **Run the frontend**
+
+```bash
+npm start
+```
+
+- Open `http://localhost:3000` in your browser.
+
+---
+
+## Usage
+
+1. Log in with your credentials.
+2. On the dashboard:
+
+   - Switch map tile layers using the dropdown.
+   - Enter latitude and longitude to calculate and display land area.
+   - Or upload a GeoJSON/JSON file to visualize a land area.
+
+3. Stored data can be retrieved from the database and displayed again.
+
+---
+
+## Project Structure
+
+```
+/backend        # Express server
+/frontend       # React app
+/db             # SQL schema or seed data
+.env            # Environment variables
+```
+
+---
+
+## Future Improvements
+
+- Deploy the app to a hosting service (Render, Vercel, etc.).
+- Add user registration and password reset functionality.
+- Enable sharing or exporting calculated land areas.
+- Add map drawing tools for custom polygons.
+
+---
