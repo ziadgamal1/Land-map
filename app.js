@@ -1,19 +1,26 @@
 const express = require("express");
 const app = express();
+const fs = require("fs");
 const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
 import mysql from "mysql2/promise";
-const { pass, jwtPass } = process.env;
+const { pass, jwtPass, DB_HOST, DB_user, DB_NAME } = process.env;
 import jwt from "jsonwebtoken";
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://land-map-umsa.onrender.com"],
+  })
+);
 const db = mysql.createPool({
-  host: "127.0.0.1",
-  user: "Ziad",
+  host: DB_HOST,
+  user: DB_user,
   password: pass,
-  database: "landmap",
+  database: DB_NAME,
+  ssl: {
+    ca: fs.readFileSync("C:/Users/user/Documents/dumps/ca.pem", "utf-8"),
+  },
 });
-
 const upload = multer({
   fileFilter: (req, file, cb) => {
     const allowed = [
@@ -48,7 +55,7 @@ app.use((req, res, next) => {
 });
 app.post("/signup", (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  db.query("insert into credentials (userName,password) values (?,?)", [
+  db.query("insert into Credentials (userName,password) values (?,?)", [
     userName,
     password,
   ])

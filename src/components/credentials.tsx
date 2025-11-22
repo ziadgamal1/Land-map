@@ -14,7 +14,7 @@ export default function Login() {
     dialogRef.current?.showModal();
   }, []);
   async function signUpHandler(values: { userName: string; password: string }) {
-    const response = await fetch("http://localhost:8080/signup", {
+    const response = await fetch("https://land-map-umsa.onrender.com/signup", {
       method: "POST",
       body: JSON.stringify(values),
       headers: {
@@ -54,7 +54,7 @@ export default function Login() {
         initialValues={{ userName: "", password: "" }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const response = await fetch("http://localhost:8080/login", {
+          const response = await fetch("https://land-map-umsa.onrender.com/login", {
             method: "POST",
             body: JSON.stringify(values),
           });

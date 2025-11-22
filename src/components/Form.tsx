@@ -31,12 +31,15 @@ export default function MapForm({ props }: Props) {
   const token = getToken();
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("http://localhost:8080/dashboard", {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://land-map-umsa.onrender.com/dashboard",
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -182,14 +185,17 @@ export default function MapForm({ props }: Props) {
           initialValues={{ file: null }}
           onSubmit={async (values) => {
             const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:8080/form", {
-              method: "POST",
-              body: values.file,
-              headers: {
-                "Content-Type": "application/geo+json",
-                authorization: `Bearer ${token}`,
-              },
-            });
+            const response = await fetch(
+              "https://land-map-umsa.onrender.com/form",
+              {
+                method: "POST",
+                body: values.file,
+                headers: {
+                  "Content-Type": "application/geo+json",
+                  authorization: `Bearer ${token}`,
+                },
+              }
+            );
             const arr = await response.json();
             console.log(arr);
             if (arr.length > 1) {
