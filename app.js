@@ -79,10 +79,11 @@ app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
   console.log(userName, password);
   try {
-    const [rows] = await db.query(
+    const result = await db.query(
       "SELECT * FROM credentials WHERE username = $1 AND password = $2",
       [userName, password]
     );
+    const rows = result.rows;
     console.log(rows);
 
     if (rows.length > 0) {
@@ -139,14 +140,14 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
   }
 });
 app.get("/dashboard", authenticateToken, async (req, res) => {
-  const [rows] = await db.query(
+  const resultDB = await db.query(
     "select * from coordinates where username=$1 ORDER BY x ASC",
     [req.user.userName]
   );
   const result = [];
   let currentGroup = [];
 
-  for (const point of rows) {
+  for (const point of resultDB.rows) {
     const arr = [point.north, point.east];
     currentGroup.push(arr);
 
