@@ -115,6 +115,7 @@ const authenticateToken = (req, res, next) => {
     next(); // Move on to the route handler
   });
 };
+let x = 0;
 app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
   const buffer = req.body; // <— raw file bytes
   const loggedInUser = req.user.userName;
@@ -122,7 +123,6 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
   try {
     const geojson = JSON.parse(text);
     const coords = geojson.features.map((f) => f.geometry.coordinates);
-    let x = 0;
     for (const element of coords) {
       for (const point of element[0]) {
         if (point[0] === element[0][0][0] && point[1] === element[0][0][1]) {
