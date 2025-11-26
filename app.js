@@ -77,11 +77,6 @@ app.post("/signup", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  const [rows1] = await db.query(
-    "SELECT * FROM credentials WHERE userName = $1 AND password = $2",
-    [userName, password]
-  );
-  console.log(rows1);
   try {
     const [rows] = await db.query(
       "SELECT * FROM credentials WHERE userName = $1 AND password = $2",
@@ -92,7 +87,6 @@ app.post("/login", async (req, res) => {
       const payload = {
         userName: rows[0].username,
       };
-      console.log(jwtPass);
       // STEP 2: Sign the payload to create the token
       const token = jwt.sign(payload, jwtPass, { expiresIn: "1h" });
       console.log(token);
