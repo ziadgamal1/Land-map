@@ -9,7 +9,10 @@ const { pass, jwtPass, DB_HOST, DB_user, DB_NAME } = process.env;
 import jwt from "jsonwebtoken";
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://land-map-umsa.onrender.com"],
+    origin: "https://land-map-umsa.onrender.com",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Only if you need to send cookies/auth headers
+    optionsSuccessStatus: 204, // Standard status for OPTIONS preflight success
   })
 );
 const db = mysql.createPool({
