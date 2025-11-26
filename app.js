@@ -4,7 +4,8 @@ const fs = require("fs");
 const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
-import mysql from "mysql2/promise";
+import pkg from "pg";
+const { Pool } = pkg;
 const { pass, jwtPass, DB_HOST, DB_user, DB_NAME, DB_PORT } = process.env;
 import jwt from "jsonwebtoken";
 app.use(
@@ -15,13 +16,17 @@ app.use(
     optionsSuccessStatus: 204, // Standard status for OPTIONS preflight success
   })
 );
-const db = mysql.createPool({
+const db = new Pool({
   host: DB_HOST,
   user: DB_user,
   password: pass,
   port: Number(DB_PORT),
   database: DB_NAME,
   ssl: { rejectUnauthorized: false },
+  // optional but recommended for Render
+  max: 10,
+  connectionTimeoutMillis: 5000,
+  idleTimeoutMillis: 0,
 });
 const upload = multer({
   fileFilter: (req, file, cb) => {
