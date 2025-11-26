@@ -80,9 +80,10 @@ app.post("/login", async (req, res) => {
   console.log(userName, password);
   try {
     const [rows] = await db.query(
-      "SELECT * FROM credentials WHERE userName = $1 AND password = $2",
+      "SELECT * FROM credentials WHERE username = $1 AND password = $2",
       [userName, password]
     );
+    console.log(rows);
 
     if (rows.length > 0) {
       const payload = {
