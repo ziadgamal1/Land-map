@@ -9,7 +9,7 @@ const { pass, jwtPass, DB_HOST, DB_user, DB_NAME } = process.env;
 import jwt from "jsonwebtoken";
 app.use(
   cors({
-    origin: "https://land-map-umsa.onrender.com",
+    origin: "https://land-map-nine.vercel.app",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Only if you need to send cookies/auth headers
     optionsSuccessStatus: 204, // Standard status for OPTIONS preflight success
