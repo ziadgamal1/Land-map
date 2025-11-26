@@ -21,6 +21,7 @@ const db = mysql.createPool({
   password: pass,
   port: Number(DB_PORT),
   database: DB_NAME,
+  ssl: { rejectUnauthorized: false },
 });
 const upload = multer({
   fileFilter: (req, file, cb) => {
