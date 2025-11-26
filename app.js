@@ -17,9 +17,6 @@ const db = mysql.createPool({
   user: DB_user,
   password: pass,
   database: DB_NAME,
-  ssl: {
-    ca: fs.readFileSync("C:/Users/user/Documents/dumps/ca.pem", "utf-8"),
-  },
 });
 const upload = multer({
   fileFilter: (req, file, cb) => {
