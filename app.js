@@ -55,7 +55,7 @@ app.use((req, res, next) => {
 });
 app.post("/signup", (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  db.query("insert into Credentials (userName,password) values (?,?)", [
+  db.query("insert into credentials (userName,password) values (?,?)", [
     userName,
     password,
   ])
