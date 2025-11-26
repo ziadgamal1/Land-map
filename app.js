@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 });
 app.post("/signup", (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  db.query("insert into credentials (userName,password) values (?,?)", [
+  db.query("insert into credentials (userName,password) values ($1,$2)", [
     userName,
     password,
   ])
@@ -73,13 +73,13 @@ app.post("/signup", (req, res) => {
 app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
   const [rows1] = await db.query(
-    "SELECT * FROM credentials WHERE userName = ? AND password = ?",
+    "SELECT * FROM credentials WHERE userName = $1 AND password = $2",
     [userName, password]
   );
   console.log(rows1);
   try {
     const [rows] = await db.query(
-      "SELECT * FROM credentials WHERE userName = ? AND password = ?",
+      "SELECT * FROM credentials WHERE userName = $1 AND password = $2",
       [userName, password]
     );
 
@@ -127,7 +127,7 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
           x++;
         }
         db.query(
-          "insert into coordinates (username,north, east,x) values (?,?, ?,?)",
+          "insert into coordinates (username,north, east,x) values ($1,$2, $3,$4)",
           [loggedInUser, point[1], point[0], x]
         );
       }
@@ -139,7 +139,7 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
 });
 app.get("/dashboard", authenticateToken, async (req, res) => {
   const [rows] = await db.query(
-    "select * from coordinates where username=? ORDER BY x ASC",
+    "select * from coordinates where username=$1 ORDER BY x ASC",
     [req.user.userName]
   );
   const result = [];
