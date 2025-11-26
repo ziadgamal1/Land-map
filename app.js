@@ -5,7 +5,7 @@ const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
 import mysql from "mysql2/promise";
-const { pass, jwtPass, DB_HOST, DB_user, DB_NAME } = process.env;
+const { pass, jwtPass, DB_HOST, DB_user, DB_NAME, DB_PORT } = process.env;
 import jwt from "jsonwebtoken";
 app.use(
   cors({
@@ -19,6 +19,7 @@ const db = mysql.createPool({
   host: DB_HOST,
   user: DB_user,
   password: pass,
+  port: DB_PORT,
   database: DB_NAME,
 });
 const upload = multer({
