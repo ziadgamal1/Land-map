@@ -144,6 +144,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
     "select * from coordinates where username=$1 ORDER BY x ASC",
     [req.user.userName]
   );
+  console.log(resultDB);
   const result = [];
   let currentGroup = [];
 
