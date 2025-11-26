@@ -169,7 +169,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
     res.status(404).json({ message: "No data found" });
     return;
   } else {
-    res.status(200).json([result]);
+    res.status(200).json(result);
   }
 });
 app.listen(port);
