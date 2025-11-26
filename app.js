@@ -19,7 +19,7 @@ const db = mysql.createPool({
   host: DB_HOST,
   user: DB_user,
   password: pass,
-  port: DB_PORT,
+  port: Number(DB_PORT),
   database: DB_NAME,
 });
 const upload = multer({
