@@ -77,6 +77,7 @@ app.post("/signup", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
+  console.log(userName, password);
   try {
     const [rows] = await db.query(
       "SELECT * FROM credentials WHERE userName = $1 AND password = $2",
