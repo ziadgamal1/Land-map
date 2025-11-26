@@ -54,10 +54,7 @@ export default function MapForm({ props }: Props) {
     if (!DBdata || selectedOption === null) return;
     const selected = DBdata[selectedOption as unknown as number];
     console.log(selected);
-    const areaKm2 = PolygonCalculation(
-      selected.map((arr) => [arr]),
-      map
-    );
+    const areaKm2 = PolygonCalculation(selected, map);
     setCalculatedNumber(areaKm2);
   }
   return (
