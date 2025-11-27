@@ -1,7 +1,7 @@
 ---
 # Landmap
 
-Landmap is a full-stack web application that allows users to calculate and visualize land areas on a map. Users can log in, manage map layers, input coordinates, and upload GeoJSON/JSON files. Data is stored in a MySQL database for retrieval and future use.
+Landmap is a full-stack web application that allows users to calculate and visualize land areas on a map. Users can log in, manage map layers, input coordinates, and upload GeoJSON/JSON files. Data is stored in a postgreSQL database for retrieval and future use.
 ---
 
 ## Features
@@ -15,7 +15,7 @@ Landmap is a full-stack web application that allows users to calculate and visua
 
 - **Data Storage**:
 
-  - MySQL database stores user inputs and uploaded data.
+  - postgreSQL database stores user inputs and uploaded data.
   - Retrieve and display previously stored data.
 
 ---
@@ -24,7 +24,7 @@ Landmap is a full-stack web application that allows users to calculate and visua
 
 - **Frontend**: React-ts, React-Leaflet.js,tailwind-CSS
 - **Backend**: Node.js, Express,JWT(authentication)
-- **Database**: MySQL
+- **Database**: postgreSQL
 - **Mapping Services**: Leaflet tile layers (OpenStreetMap, CartoDB, ArcGIS)
 
 ---
@@ -53,9 +53,9 @@ cd landmap
 npm install
 ```
 
-3. **Set up MySQL database**
+3. **Set up postgreSQL database**
 
-- Create a MySQL database manually.
+- Create a postgreSQL database manually.
 - Run the SQL script provided in `/db/schema.sql` (if available) to create necessary tables.
 - Note the database credentials for the `.env` file.
 
@@ -102,22 +102,12 @@ npm start
 
 ---
 
-## Project Structure
-
-```
-/backend        # Express server
-/frontend       # React app
-/db             # SQL schema or seed data
-.env            # Environment variables
-```
-
----
-
 ## Future Improvements
 
-- Deploy the app to a hosting service (Render, Vercel, etc.).
+- Fix DB issue
 - Add user registration and password reset functionality.
 - Enable sharing or exporting calculated land areas.
-- Add map drawing tools for custom polygons.
 
 ---
+
+![image](../Screenshot 2025-11-27 174313.png "App showcase")
