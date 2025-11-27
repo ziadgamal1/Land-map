@@ -160,18 +160,16 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
   for (const point of resultDB.rows) {
     const arr = [point.north, point.east];
 
-    // Check if this point matches the first point in the current group
-    if (
-      currentGroup.length > 0 &&
-      currentGroup[0][0] === arr[0] &&
-      currentGroup[0][1] === arr[1]
-    ) {
-      // Complete the polygon by adding the closing point
+    if (currentGroup.length === 0) {
+      // Start a new polygon
+      currentGroup.push(arr);
+    } else if (currentGroup[0][0] === arr[0] && currentGroup[0][1] === arr[1]) {
+      // Found the closing point - complete the polygon
       currentGroup.push(arr);
       result.push(currentGroup);
       currentGroup = [];
     } else {
-      // Add point to current group
+      // Continue building the current polygon
       currentGroup.push(arr);
     }
   }
