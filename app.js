@@ -175,7 +175,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
       currentGroup.push(arr);
     }
   }
-
+  console.log(result);
   // Add any remaining points if the last group didn't end with a duplicate
 
   if (result.length === 0) {
