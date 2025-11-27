@@ -12,7 +12,7 @@ export default function Login() {
     }
     setShowDashboard(true);
     dialogRef.current?.showModal();
-  }, []);
+  }, [localStorage]);
   async function signUpHandler(values: { userName: string; password: string }) {
     const response = await fetch("https://land-map-umsa.onrender.com/signup", {
       method: "POST",
