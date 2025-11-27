@@ -110,4 +110,4 @@ npm start
 
 ---
 
-<img src="../Screenshot 2025-11-27 174313.png" alt="web app" title="APP showcase" />
+<img src="https://res.cloudinary.com/dzu8kut0w/image/upload/v1764261202/Screenshot_2025-11-27_174313_a2rqaj.png" alt="web app" title="APP showcase" />
