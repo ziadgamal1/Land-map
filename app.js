@@ -141,10 +141,9 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
 });
 app.get("/dashboard", authenticateToken, async (req, res) => {
   const resultDB = await db.query(
-    "select * from coordinates where username=$1 ORDER BY x ASC",
+    "select * from coordinates where username=$1 ",
     [req.user.userName]
   );
-  console.log(resultDB);
   const result = [];
   let currentGroup = [];
 
