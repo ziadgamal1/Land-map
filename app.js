@@ -157,7 +157,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
   const result = [];
   let currentGroup = [];
 
-  for (const point of data) {
+  for (const point of resultDB.rows) {
     const arr = [point.north, point.east];
     currentGroup.push(arr);
 
