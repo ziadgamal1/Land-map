@@ -14,7 +14,7 @@ export default function Login() {
     dialogRef.current?.showModal();
   }, []);
   async function signUpHandler(values: { userName: string; password: string }) {
-    const response = await fetch("https://land-map-nine.vercel.app/signup", {
+    const response = await fetch("https://land-map-umsa.onrender.com/signup", {
       method: "POST",
       body: JSON.stringify(values),
       headers: {
@@ -55,7 +55,7 @@ export default function Login() {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           const response = await fetch(
-            "https://land-map-nine.vercel.app/login",
+            "https://land-map-umsa.onrender.com/login",
             {
               method: "POST",
               body: JSON.stringify(values),
