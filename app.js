@@ -1,16 +1,26 @@
 const express = require("express");
 const app = express();
-const fs = require("fs");
 const multer = require("multer");
 require("dotenv").config();
 const cors = require("cors");
 import pkg from "pg";
 const { Pool } = pkg;
-const { pass, jwtPass, DB_HOST, DB_user, DB_NAME, DB_PORT } = process.env;
+const {
+  pass,
+  jwtPass,
+  DB_HOST,
+  DB_user,
+  DB_NAME,
+  DB_PORT,
+  localDB_host,
+  localDB_user,
+  localDB_name,
+  localDB_pass,
+} = process.env;
 import jwt from "jsonwebtoken";
 app.use(
   cors({
-    origin: "https://land-map-nine.vercel.app",
+    origin: ["https://land-map-nine.vercel.app", "http://localhost:3000"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Only if you need to send cookies/auth headers
     optionsSuccessStatus: 204, // Standard status for OPTIONS preflight success
@@ -77,12 +87,12 @@ app.post("/signup", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { userName, password } = JSON.parse(req.body);
-  console.log(userName, password);
   try {
     const result = await db.query(
       "SELECT * FROM credentials WHERE username = $1 AND password = $2",
       [userName, password]
     );
+    console.log(result);
     const rows = result.rows;
     console.log(rows);
 
@@ -168,7 +178,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
     res.status(404).json({ message: "No data found" });
     return;
   } else {
-    res.status(200).json(result);
+    res.status(200).json(result.map((group) => [group]));
   }
 });
 app.listen(port);

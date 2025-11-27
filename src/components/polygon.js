@@ -5,7 +5,13 @@ export default function Polygon(arr, map) {
   const areaKm2 = [];
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i];
-    const shape = polygon([element]);
+    console.log(element);
+    let shape;
+    if (Array.isArray(element[0][0])) {
+      shape = polygon(element);
+    } else {
+      shape = polygon([element]);
+    }
     const areaMeters = area(shape);
     areaKm2.push(areaMeters / 1_000_000);
     const Km2 = areaMeters / 1_000_000;

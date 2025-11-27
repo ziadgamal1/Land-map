@@ -32,7 +32,7 @@ export default function MapForm({ props }: Props) {
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
-        "https://land-map-umsa.onrender.com/dashboard",
+        "https://land-map-nine.vercel.app/dashboard",
         {
           method: "GET",
           headers: {
@@ -42,7 +42,6 @@ export default function MapForm({ props }: Props) {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setDBdata(data);
       } else {
         return;
@@ -183,7 +182,7 @@ export default function MapForm({ props }: Props) {
           onSubmit={async (values) => {
             const token = localStorage.getItem("token");
             const response = await fetch(
-              "https://land-map-umsa.onrender.com/form",
+              "https://land-map-nine.vercel.app/form",
               {
                 method: "POST",
                 body: values.file,
