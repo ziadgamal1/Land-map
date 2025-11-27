@@ -151,7 +151,7 @@ app.post("/form", upload.single("file"), authenticateToken, (req, res) => {
 });
 app.get("/dashboard", authenticateToken, async (req, res) => {
   const resultDB = await db.query(
-    "select * from coordinates where username=$1 ",
+    "select * from coordinates where username=$1 ORDER BY x, created_at ASC",
     [req.user.userName]
   );
   const result = [];
