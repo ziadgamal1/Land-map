@@ -42,6 +42,7 @@ export default function MapForm({ props }: Props) {
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setDBdata(data);
       } else {
         return;
