@@ -159,16 +159,20 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
 
   for (const point of resultDB.rows) {
     const arr = [point.north, point.east];
-    currentGroup.push(arr);
 
-    // Check if this point already exists earlier in the current group
-    const isDuplicate = currentGroup
-      .slice(0, -1)
-      .some((p) => p[0] === arr[0] && p[1] === arr[1]);
-
-    if (isDuplicate) {
+    // Check if this point matches the first point in the current group
+    if (
+      currentGroup.length > 0 &&
+      currentGroup[0][0] === arr[0] &&
+      currentGroup[0][1] === arr[1]
+    ) {
+      // Complete the polygon by adding the closing point
+      currentGroup.push(arr);
       result.push(currentGroup);
       currentGroup = [];
+    } else {
+      // Add point to current group
+      currentGroup.push(arr);
     }
   }
 
