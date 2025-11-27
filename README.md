@@ -110,4 +110,4 @@ npm start
 
 ---
 
-![image](../Screenshot 2025-11-27 174313.png "App showcase")
+<img src="../Screenshot 2025-11-27 174313.png" alt="web app" title="APP showcase" />
